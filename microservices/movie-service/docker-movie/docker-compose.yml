@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  web:
+    networks:
+      - docker-rabbit
+    build:
+      context: ../
+      dockerfile: ./docker-movie/Dockerfile
+    container_name: docker-movie
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_URL: ${POSTGRES_URL}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+
+    volumes:
+      - ../web:/home/app/web
+    command: flask run --host=0.0.0.0 --port=90 --debug
+    ports:
+      - 90:90
+
+networks:
+  docker-rabbit:
+    external: true
